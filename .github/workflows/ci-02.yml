@@ -1,33 +1,20 @@
+name: Mi Flujo de Trabajo
+
 on:
   push:
-    branches: [ main ]
- 
+    branches:
+      - main
+
 jobs:
-  build-and-basic-test:
+  mi_trabajo:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'      
-      - name: Ejecutar docker-compose para tener mysql
-        run: docker-compose up -d            
-      - name: Instalar dependencias
-        run: npm install
-      - name: Ejecutar tests rápidos
-        run: npm test -- app.test.js
-  
-  database-test: 
-    needs: build-and-basic-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14.x'            
-      - name: Ejecutar docker-compose para tener mysql
-        run: docker-compose up -d            
-      - name: Instalar dependencias
-        run: npm install
-      - name: Ejecutar tests lentos
-        run: npm test -- app.bd.test.js
+    - name: Checkout del código
+      uses: actions/checkout@v2
+
+    - name: Ejecutar mi aplicación con contraseña oculta
+      env:
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        ./script.sh
